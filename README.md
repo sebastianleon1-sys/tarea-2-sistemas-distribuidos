@@ -31,33 +31,15 @@ El sistema ejecuta consultas sintéticas Q1-Q5 sobre datos precargados en memori
 - Pandas
 - Matplotlib
 
-## Estructura del proyecto
+## Justificación de tecnologías
 
-```text
-.
-├── app/
-│   ├── cache.py
-│   ├── data.py
-│   ├── main.py
-│   ├── kafka_common.py
-│   ├── kafka_consumer.py
-│   ├── kafka_metrics.py
-│   ├── kafka_monitor.py
-│   ├── kafka_producer.py
-│   ├── kafka_report.py
-│   ├── metrics.py
-│   ├── queries.py
-│   ├── traffic_generator.py
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── data/
-│       └── 967_buildings.csv.gz
-├── docker-compose.yml
-├── run_experiments.py
-├── run_kafka_experiments.py
-├── README.md
-└── .gitignore
-```
+Se escogió **Python 3.11** porque permite implementar rápidamente simulaciones, generación de tráfico, procesamiento de datos y automatización de experimentos con un código simple y legible. Además, su ecosistema facilita trabajar con datos tabulares, métricas y gráficos sin introducir una complejidad innecesaria para el objetivo principal del proyecto.
+
+Se utilizó **Redis 7** como sistema de caché porque ofrece acceso en memoria de baja latencia, soporte nativo para TTL y políticas de remoción como LRU y LFU. Estas características calzan directamente con la Tarea 1, donde se requería evaluar el efecto de la caché sobre consultas geoespaciales repetidas. Para la Tarea 2, Redis se mantiene como componente base para separar el análisis de caché del análisis de tolerancia a fallos con Kafka.
+
+Se eligió **Pandas** para cargar, filtrar y procesar el dataset Google Open Buildings en memoria, ya que entrega operaciones eficientes y expresivas para trabajar con columnas como latitud, longitud, área y confianza. Esto permite mantener el Generador de Respuestas simple y enfocado en las consultas Q1-Q5.
+
+Se utilizó **Matplotlib** para generar gráficos comparativos de los experimentos. La rúbrica exige respaldar el análisis con visualizaciones, y Matplotlib permite producir archivos PNG reproducibles directamente desde los resultados JSON del sistema.
 
 ## Dataset
 
@@ -67,6 +49,10 @@ Antes de ejecutar el sistema, se debe copiar el archivo:
 
 ```text
 967_buildings.csv.gz
+
+download:
+
+https://storage.googleapis.com/open-buildings-data/v3/polygons_s2_level_4_gzip/967_buildings.csv.gz
 ```
 
 en la siguiente ruta:
@@ -259,6 +245,10 @@ Los gráficos principales generados por el sistema son:
 07_throughput_lru_por_tamano.png
 08_memoria_redis_lru.png
 09_cache_efficiency_lru_por_tamano.png
+01_throughput_consumers.png
+02_latencia_p95_escenarios.png
+03_backlog_maximo.png
+04_retry_dlq_rates.png
 ```
 
 ## Políticas de caché evaluadas
