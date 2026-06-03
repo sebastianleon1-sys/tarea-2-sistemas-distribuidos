@@ -1,0 +1,292 @@
+{
+  "expected_messages": 1000,
+  "produced": 1000,
+  "success": 1000,
+  "cache_hits": 297,
+  "cache_misses": 703,
+  "retries": 0,
+  "recovered": 0,
+  "dlq": 0,
+  "temporary_failures": 0,
+  "started_at": 1780452111.7460964,
+  "finished_at": 0.0,
+  "throughput_qps": 22.1331,
+  "latency_p50_ms": 33434.3014,
+  "latency_p95_ms": 36700.4097,
+  "retry_rate": 0.0,
+  "recovery_rate": 0.0,
+  "dlq_rate": 0.0,
+  "backlog_samples": [
+    {
+      "timestamp": 1780452112.04432,
+      "main_backlog": 0,
+      "retry_backlog": 0,
+      "total_backlog": 0
+    },
+    {
+      "timestamp": 1780452113.0633998,
+      "main_backlog": 140,
+      "retry_backlog": 0,
+      "total_backlog": 140
+    },
+    {
+      "timestamp": 1780452114.0810795,
+      "main_backlog": 310,
+      "retry_backlog": 0,
+      "total_backlog": 310
+    },
+    {
+      "timestamp": 1780452115.0990007,
+      "main_backlog": 480,
+      "retry_backlog": 0,
+      "total_backlog": 480
+    },
+    {
+      "timestamp": 1780452116.1172338,
+      "main_backlog": 649,
+      "retry_backlog": 0,
+      "total_backlog": 649
+    },
+    {
+      "timestamp": 1780452117.1344745,
+      "main_backlog": 819,
+      "retry_backlog": 0,
+      "total_backlog": 819
+    },
+    {
+      "timestamp": 1780452118.1516948,
+      "main_backlog": 989,
+      "retry_backlog": 0,
+      "total_backlog": 989
+    },
+    {
+      "timestamp": 1780452119.170018,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452120.1847477,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452121.2029624,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452122.221665,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452123.238085,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452124.252654,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452125.2688444,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452126.284982,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452127.3005786,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452128.3160474,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452129.333885,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452130.3493476,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452131.365359,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452132.3822863,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452133.398404,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452134.412993,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452135.4308245,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452136.4482422,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452137.4673252,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452138.4872704,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452139.5219488,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452140.5402741,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452141.5627418,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452142.5780087,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452143.5928671,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452144.6172533,
+      "main_backlog": 1000,
+      "retry_backlog": 0,
+      "total_backlog": 1000
+    },
+    {
+      "timestamp": 1780452145.6381836,
+      "main_backlog": 970,
+      "retry_backlog": 0,
+      "total_backlog": 970
+    },
+    {
+      "timestamp": 1780452146.6603975,
+      "main_backlog": 841,
+      "retry_backlog": 0,
+      "total_backlog": 841
+    },
+    {
+      "timestamp": 1780452147.6849105,
+      "main_backlog": 694,
+      "retry_backlog": 0,
+      "total_backlog": 694
+    },
+    {
+      "timestamp": 1780452148.7000089,
+      "main_backlog": 524,
+      "retry_backlog": 0,
+      "total_backlog": 524
+    },
+    {
+      "timestamp": 1780452149.7245507,
+      "main_backlog": 338,
+      "retry_backlog": 0,
+      "total_backlog": 338
+    },
+    {
+      "timestamp": 1780452150.7392325,
+      "main_backlog": 128,
+      "retry_backlog": 0,
+      "total_backlog": 128
+    },
+    {
+      "timestamp": 1780452151.7540386,
+      "main_backlog": 0,
+      "retry_backlog": 0,
+      "total_backlog": 0
+    },
+    {
+      "timestamp": 1780452152.776911,
+      "main_backlog": 0,
+      "retry_backlog": 0,
+      "total_backlog": 0
+    },
+    {
+      "timestamp": 1780452153.7991846,
+      "main_backlog": 0,
+      "retry_backlog": 0,
+      "total_backlog": 0
+    },
+    {
+      "timestamp": 1780452154.8214407,
+      "main_backlog": 0,
+      "retry_backlog": 0,
+      "total_backlog": 0
+    },
+    {
+      "timestamp": 1780452155.8358884,
+      "main_backlog": 0,
+      "retry_backlog": 0,
+      "total_backlog": 0
+    },
+    {
+      "timestamp": 1780452156.8517199,
+      "main_backlog": 0,
+      "retry_backlog": 0,
+      "total_backlog": 0
+    }
+  ],
+  "max_backlog": 1000
+}
