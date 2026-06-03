@@ -1,10 +1,12 @@
-# Tarea 1 - Sistemas Distribuidos
+# Tarea 1 y 2 - Sistemas Distribuidos
 
-Plataforma de análisis de consultas geoespaciales con caché distribuida usando Redis.
+Plataforma de análisis de consultas geoespaciales con caché Redis y procesamiento asíncrono con Apache Kafka.
 
 ## Descripción
 
 Este proyecto implementa una simulación de caché aplicada a consultas geoespaciales sobre el dataset Google Open Buildings. El sistema trabaja con cinco zonas predefinidas de la Región Metropolitana de Santiago de Chile y permite evaluar el comportamiento de distintas políticas de caché bajo diferentes tamaños de memoria y distribuciones de tráfico.
+
+Para la Tarea 2 se incorpora Apache Kafka entre el generador de tráfico y los consumidores. El nuevo flujo permite desacoplar la llegada de consultas del procesamiento, ejecutar múltiples consumidores en paralelo, reenviar consultas fallidas a un tópico de reintentos y enviar a DLQ los mensajes que superan el máximo de intentos.
 
 La arquitectura del sistema está compuesta por:
 
@@ -12,6 +14,10 @@ La arquitectura del sistema está compuesta por:
 - Caché Redis.
 - Generador de respuestas.
 - Sistema de métricas.
+- Kafka Producer.
+- Kafka Consumers en un mismo grupo de consumo.
+- Tópico principal, tópico de reintentos y Dead Letter Queue.
+- Monitor de backlog Kafka.
 
 El sistema ejecuta consultas sintéticas Q1-Q5 sobre datos precargados en memoria y registra métricas como hit rate, miss rate, throughput, latencia p50, latencia p95, eviction rate y cache efficiency.
 
@@ -19,6 +25,7 @@ El sistema ejecuta consultas sintéticas Q1-Q5 sobre datos precargados en memori
 
 - Python 3.11
 - Redis 7
+- Apache Kafka
 - Docker
 - Docker Compose
 - Pandas
@@ -32,6 +39,12 @@ El sistema ejecuta consultas sintéticas Q1-Q5 sobre datos precargados en memori
 │   ├── cache.py
 │   ├── data.py
 │   ├── main.py
+│   ├── kafka_common.py
+│   ├── kafka_consumer.py
+│   ├── kafka_metrics.py
+│   ├── kafka_monitor.py
+│   ├── kafka_producer.py
+│   ├── kafka_report.py
 │   ├── metrics.py
 │   ├── queries.py
 │   ├── traffic_generator.py
@@ -41,6 +54,7 @@ El sistema ejecuta consultas sintéticas Q1-Q5 sobre datos precargados en memori
 │       └── 967_buildings.csv.gz
 ├── docker-compose.yml
 ├── run_experiments.py
+├── run_kafka_experiments.py
 ├── README.md
 └── .gitignore
 ```
@@ -168,6 +182,69 @@ Si ya existen resultados en `experiment_results/all_results.json`, se pueden reg
 python run_experiments.py --plots-only
 ```
 
+## Tarea 2: ejecución con Kafka
+
+Levantar Redis, Kafka y Zookeeper:
+
+```bash
+docker compose --profile kafka up -d redis kafka
+```
+
+Ejecutar un consumidor Kafka:
+
+```bash
+docker compose --profile kafka run --rm kafka-consumer
+```
+
+En otra terminal, publicar consultas:
+
+```bash
+docker compose --profile kafka run --rm kafka-producer python kafka_producer.py --distribution zipf --queries 1000 --rate-qps 200 --seed 42
+```
+
+Consultar el reporte de métricas:
+
+```bash
+docker compose --profile kafka run --rm kafka-producer python kafka_report.py
+```
+
+### Tópicos Kafka usados
+
+| Tópico | Uso |
+|---|---|
+| geo-queries | Cola principal de consultas generadas |
+| geo-queries-retry | Cola de reintentos para fallas temporales |
+| geo-queries-dlq | Dead Letter Queue para consultas que exceden los reintentos |
+
+Cada mensaje incluye:
+
+- `id`: identificador único.
+- `query`: parámetros Q1-Q5.
+- `attempts`: número de reintentos realizados.
+- `created_at`: timestamp de creación.
+- `last_error`: último error temporal registrado.
+
+### Ejecutar experimentos Kafka
+
+```bash
+python run_kafka_experiments.py
+```
+
+El script ejecuta escenarios de:
+
+- Kafka con 1, 2 y 4 consumers.
+- Falla temporal del Generador de Respuestas.
+- Reintentos con fallas aleatorias.
+- Spike de tráfico.
+
+Los resultados se guardan en:
+
+```text
+experiment_results_kafka/
+```
+
+Incluyen métricas JSON y gráficos comparativos de throughput, latencia p95, backlog máximo, retry rate y DLQ rate.
+
 ## Gráficos generados
 
 Los gráficos principales generados por el sistema son:
@@ -219,6 +296,11 @@ El sistema registra:
 - Eviction rate.
 - Cache efficiency.
 - Hit rate por tipo de consulta.
+- Retry rate.
+- Recovery rate.
+- DLQ rate.
+- Backlog size.
+- Recovery time aproximado mediante muestras de backlog.
 
 ## Video de demostración
 
