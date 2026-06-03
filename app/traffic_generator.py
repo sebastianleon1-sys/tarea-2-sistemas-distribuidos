@@ -1,5 +1,5 @@
 import random
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Literal
 
 ZONE_IDS = ["Z4", "Z1", "Z2", "Z3", "Z5"]
@@ -41,6 +41,19 @@ class Query:
 
     def __repr__(self):
         return f"Query({self.query_type}, key={self.cache_key()})"
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            query_type=data["query_type"],
+            zone_id=data["zone_id"],
+            zone_b=data["zone_b"],
+            confidence_min=float(data["confidence_min"]),
+            bins=int(data["bins"]),
+        )
 
 
 def _zipf_zone_weights(n: int, s: float = 1.2) -> list[float]:

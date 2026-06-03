@@ -3,11 +3,11 @@ services:
     image: redis:7-alpine
     container_name: redis_cache
     ports:
-      - "6379:6379"
+      - "${REDIS_HOST_PORT:-6380}:6379"
     command: >
       redis-server
       --maxmemory 200mb
-      --maxmemory-policy allkeys-lfu
+      --maxmemory-policy allkeys-lru
       --save ""
       --appendonly no
     healthcheck:
@@ -15,6 +15,33 @@ services:
       interval: 3s
       timeout: 5s
       retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    depends_on:
+      - zookeeper
+    ports:
+      - "${KAFKA_HOST_PORT:-29092}:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 5s
+      timeout: 10s
+      retries: 12
 
   app:
     build: ./app
@@ -33,3 +60,60 @@ services:
       --queries 10000
       --ttl 300
       --seed 42
+
+  kafka-producer:
+    build: ./app
+    profiles: ["kafka"]
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CACHE_PAYLOAD_BYTES=75000
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    volumes:
+      - ./output:/app/output:z
+    command: >
+      python kafka_producer.py
+      --distribution zipf
+      --queries 1000
+      --rate-qps 200
+      --seed 42
+
+  kafka-consumer:
+    build: ./app
+    profiles: ["kafka"]
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CACHE_PAYLOAD_BYTES=75000
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_GROUP_ID=geo-workers
+    volumes:
+      - ./output:/app/output:z
+    command: >
+      python kafka_consumer.py
+      --max-attempts 3
+      --retry-delay-ms 250
+
+  kafka-monitor:
+    build: ./app
+    profiles: ["kafka"]
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      - PYTHONUNBUFFERED=1
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_GROUP_ID=geo-workers
+    command: >
+      python kafka_monitor.py
+      --interval-s 1
