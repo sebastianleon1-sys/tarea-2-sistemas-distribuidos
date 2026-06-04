@@ -292,9 +292,9 @@ El sistema registra:
 - Backlog size.
 - Recovery time aproximado mediante muestras de backlog.
 
-## Video de demostración
+## Video de demostración[
 
-https://youtu.be/hNh-GjBrcW4
+https://youtu.be/r5UDT1scQoE
 
 ## Autor
 
